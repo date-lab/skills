@@ -1,0 +1,8 @@
+{
+  "skill_name": "octopus",
+  "evals": [
+    {"id": 1, "name": "lammps-4node-points", "prompt": "阪大のOCTOPUSでLAMMPSを4ノード使ってフラットMPIで回したいです。グループはG01234、入力ファイルは in.melt、だいたい10時間くらいで終わる見込みです。ジョブスクリプトを書いてください。あとこれで何ポイントくらい消費するかも教えて。", "expected_output": "OCT, --group=G01234, -b 4, -T intmpi, cpunum_job=256, OMP_NUM_THREADS=1, BaseApp+lammps/22Jul2025, mpirun ${NQSV_MPIOPTS} -np 1024 lmp, elapstim_req ~11-12h, points ≈ 4×10×0.5287×1.15 ≈ 24.3", "files": []},
+    {"id": 2, "name": "slurm-python-port", "prompt": "研究室のSlurmクラスタで使ってた下のスクリプトをOCTOPUSに移植したい。numpyとscikit-learnを使うpythonスクリプトで、32スレッドくらいで十分、メモリは50GBあれば足りる。ポイントをなるべく節約したい。グループ名はまだ確認してない。\n\n#!/bin/bash\n#SBATCH -p cpu\n#SBATCH -c 32\n#SBATCH --mem=50G\n#SBATCH -t 06:00:00\nsource ~/venv/bin/activate\nexport OMP_NUM_THREADS=32\npython analyze.py", "expected_output": "OCT-S with cpunum_job=32,memsz_job~50-64GB (1/4 share), venv created on frontend in work area with BasePy, pip install done on frontend (no internet on compute), --group placeholder + groups command, cd $PBS_O_WORKDIR, OMP_NUM_THREADS via -v or export", "files": []},
+    {"id": 3, "name": "node-limit-error", "prompt": "OCTOPUSで #PBS -q OCT, #PBS -b 80, #PBS -T intmpi, elapstim_req=24:00:00 のジョブをqsubしたら、受け付けられたっぽいのにすぐ消えて、.eファイルに『Request could not be queued to execution queues ... Exceeded resource limit.』と出ていました。何がいけないんでしょう？どう直せばいい？", "expected_output": "Explains OCT is a transfer queue so limit errors appear in .e; since May 2026 concurrent node limit is 62; reduce -b to ≤62 or contact D3 center for >62; also check cpunum_job/memory/time within limits", "files": []}
+  ]
+}
