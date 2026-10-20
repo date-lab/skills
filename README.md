@@ -1,21 +1,65 @@
-# octopus skill
+# skills
 
-大阪大学 D3センターのスーパーコンピュータ OCTOPUS を使うための Claude Code スキル。
-ジョブスクリプトの作成・修正、ジョブクラスの選び方とポイントの見積り、module やコンパイラの使い方、アプリの実行、SSH 経由でのジョブ投入や状態確認を扱う。
+研究室で使う Claude Code のスキル集。Claude Code のプラグインマーケットプレイスとしてインストールできる。
+
+## スキル一覧
+
+| プラグイン | 内容 |
+| --- | --- |
+| [octopus](skills/octopus/) | 大阪大学 D3センターのスーパーコンピュータ OCTOPUS の利用（ジョブスクリプト作成、ジョブクラス選択とポイント見積り、module、アプリ実行、SSH 経由のジョブ投入） |
 
 ## インストール
 
-```sh
-git clone git@github.com:keichi/octopus-skill.git ~/Projects/octopus-skill
-ln -s ~/Projects/octopus-skill ~/.claude/skills/octopus
+Claude Code の中で、まずこのリポジトリをマーケットプレイスとして登録する。
+
 ```
+/plugin marketplace add date-lab/skills
+```
+
+次に使いたいスキルをプラグインとしてインストールする。
+
+```
+/plugin install octopus@date-lab
+```
+
+`/plugin` を引数なしで実行すると、一覧から選んでインストールすることもできる。インストール後は Claude Code を再起動する。
+
+### 更新
+
+```
+/plugin marketplace update date-lab
+```
+
+### スキルだけを手で入れる場合
+
+プラグインを使わず、スキルのディレクトリを `~/.claude/skills/` にリンクしてもよい。
+
+```sh
+git clone https://github.com/date-lab/skills.git
+ln -s "$PWD/skills/skills/octopus" ~/.claude/skills/octopus
+```
+
+## スキルの追加方法
+
+1. `skills/<スキル名>/SKILL.md` を作る（必要なら `references/` などを同じディレクトリに置く）
+2. `.claude-plugin/marketplace.json` の `plugins` に次のエントリを追加する
+
+   ```json
+   {
+     "name": "<スキル名>",
+     "description": "<一行の説明>",
+     "source": "./",
+     "strict": false,
+     "skills": ["./skills/<スキル名>"]
+   }
+   ```
+
+3. 上の「スキル一覧」の表に追記する
+4. `claude plugin validate .` でマーケットプレイスの記述をチェックする
 
 ## 構成
 
-- `SKILL.md`: 基本事項、ジョブスクリプトのルール、SSH 経由で操作するときの手順
-- `references/jobs.md`: ジョブクラス、qsub オプション、並列の形態ごとのテンプレート、ポイント計算
-- `references/environment.md`: ログイン、ファイル転送、ストレージ、module、Python、Apptainer
-- `references/apps.md`: インストール済みアプリとジョブスクリプトの例
-- `evals/evals.json`: 動作確認に使ったテストの質問
-
-情報源は NEC「OCTOPUS 利用者向けマニュアル v8.0」（2026/04）と D3センターの Web マニュアル。モジュールのバージョン、キューの構成、MPI の挙動は 2026年10月に実機で確認した。
+```
+.claude-plugin/marketplace.json   マーケットプレイスの定義
+skills/<スキル名>/SKILL.md        各スキル本体
+```
