@@ -1,0 +1,11 @@
+{
+  "name": "octopus",
+  "version": "1.0.0",
+  "description": "大阪大学 D3センターのスーパーコンピュータ OCTOPUS を使うためのスキル",
+  "author": {
+    "name": "date-lab"
+  },
+  "skills": [
+    "./skills/octopus"
+  ]
+}
